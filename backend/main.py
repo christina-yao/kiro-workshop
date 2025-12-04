@@ -1,6 +1,7 @@
 from fastapi import FastAPI, HTTPException, status
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
+from mangum import Mangum
 from models import Event, EventCreate, EventUpdate
 from database import db_client
 from typing import List
@@ -124,3 +125,6 @@ def delete_event(event_id: str):
     except Exception as e:
         logger.error(f"Error deleting event {event_id}: {str(e)}")
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Failed to delete event")
+
+# Lambda handler
+handler = Mangum(app, lifespan="off")
